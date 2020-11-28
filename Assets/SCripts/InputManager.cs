@@ -5,27 +5,71 @@ using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour,IDragHandler,IPointerUpHandler,IPointerDownHandler
 {
-    Card currentCard;
+    public Card currentCard;
+    public float minDistanceToMoveCardToTable;
+
+
+    private float totalTime;
+    private float startTime;
+    private float endTime;
+
+    private Vector2 startPos;
+    private Vector2 endPos;
+    private float totalDistance;
+    private float distance;
+    private float currentVelocity;
 
     public void OnDrag(PointerEventData eventData)
     {
-    
+        if (currentCard != null)
+        {
+            currentCard.transform.position = eventData.position;
+        }
         
     }
 
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (EventSystem.current.currentSelectedGameObject == null) //We've to modify it on saturday.
+        if (eventData.pointerCurrentRaycast.gameObject != null && eventData.pointerCurrentRaycast.gameObject.GetComponent<Card>()!=null) 
         {
-            DebugManager.LogWithColor(EventSystem.current.currentSelectedGameObject.name, Color.blue);
+            currentCard = eventData.pointerCurrentRaycast.gameObject.GetComponent<Card>();
+            startTime = Time.time;
+            startPos = eventData.position;
+            currentCard.transform.position = eventData.position;
+            currentCard.SetFakeParent();
         }
-        Debug.Log("This ispointer down");
+        
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-    
+
+        if (currentCard != null)
+        {
+            endTime = Time.time;
+            endPos = eventData.position;
+            totalDistance = Vector2.Distance(endPos, startPos);
+            totalTime = endTime - startTime;
+
+            //speed = distance/time
+            currentVelocity = (totalDistance / totalTime)/1000f;
+
+            //if (currentVelocity > minVelocityToMoveCardToTable)
+            if (totalDistance > minDistanceToMoveCardToTable)
+            {
+
+                currentCard.MoveToTable();
+            }
+            else
+            {
+                currentCard.MoveToDeckAgain();
+            }
+
+
+        }
+
+
     }
 
     

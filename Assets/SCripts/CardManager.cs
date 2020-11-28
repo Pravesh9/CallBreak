@@ -29,13 +29,13 @@ public class CardManager : MonoBehaviour
 
         for (int i = 0; i < AllPlayersCard[0].Count; i++)
         {
-            AllCardGameObject[i].GetComponent<Card>().cardNumber = AllPlayersCard[0][i];
+         //   AllCardGameObject[i].GetComponent<Card>().cardNumber = AllPlayersCard[0][i];
 
-            AllCardGameObject[i].GetComponent<Card>().SetImage(GetImageAsPerCardNumber(AllPlayersCard[0][i]));
-            
-
-
+           // AllCardGameObject[i].GetComponent<Card>().SetImage(GetImageAsPerCardNumber(AllPlayersCard[0][i]));
+            AllCardGameObject[i].GetComponent<Card>().SetDetails(GetImageAsPerCardNumber(AllPlayersCard[0][i]), AllPlayersCard[0][i], i);
         }
+
+
 
 
         PrintAllPlayerCards();
